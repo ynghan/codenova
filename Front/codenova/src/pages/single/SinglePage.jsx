@@ -22,6 +22,7 @@ import FinishPage from '../single/modal/FinishPage';
 
 import { singleLangCode, getLangCode, verifiedRecord, postRecord } from '../../api/singleApi'
 import { userColorStore } from '../../store/userSettingStore';
+import CodeDescription from '../../components/single/CodeDescription';
 
 // 등록
 hljs.registerLanguage('java', java);
@@ -80,6 +81,8 @@ const SinglePage = () => {
 
 
     const initColors = userColorStore((state) => state.initColors);
+
+    const [showCodeDescription, setShowCodeDescription] = useState(false);
 
 
     useEffect(() => {
@@ -504,7 +507,14 @@ const SinglePage = () => {
                         lang={lang}
                         cpm={cpm}
                         elapsedTime={elapsedTime}
+                        onShowCodeDescription={() => setShowCodeDescription(true)}
                     />
+                </div>
+                
+            )}
+            {showCodeDescription && (
+                <div className="absolute inset-0 flex items-center justify-center z-50">
+                    <CodeDescription onClose={() => setShowCodeDescription(false)} />
                 </div>
             )}
         </div>
