@@ -7,6 +7,10 @@ import { formatTime } from '../../../utils/formatTimeUtils'
 import { postRecord } from '../../../api/singleApi'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import codeDescBtn1 from '../../../assets/images/codeDescriptionBtn1.png'
+import codeDescBtn2 from '../../../assets/images/codeDescriptionBtn2.png'
+import codeDescBtn3 from '../../../assets/images/codeDescriptionBtn3.png'
+import codeDescBtn4 from '../../../assets/images/codeDescriptionBtn4.png'
 // import CsWordSelectPage from './CsWordSelectPage'
 
 const FinishPage = ({ codeId, lang, cpm, elapsedTime}) => {
@@ -17,6 +21,8 @@ const FinishPage = ({ codeId, lang, cpm, elapsedTime}) => {
     const [fireworks, setFireworks] = useState([]);
     
     const [isApiLoading, setIsApiLoading] = useState(false);
+
+    const btn_class = 'cursor-pointer scale-75 transition-all duration-150 hover:brightness-110 hover:translate-y-[2px] hover:scale-[0.98] active:scale-[0.95]'
     
     useEffect(() => {
         const auth = JSON.parse(localStorage.getItem("auth-storage") || "{}");
@@ -80,6 +86,18 @@ const FinishPage = ({ codeId, lang, cpm, elapsedTime}) => {
                 >
                     미션 성공
                 </div>
+
+                {/* 코드 설명 보러 가기 버튼 */}
+                <div className = {""} >
+                     <img src={codeDescBtn1} alt="코드설명버튼" 
+                    className=  {`w-[45%] cursor-pointer absolute -top-24 -right-12  ${btn_class}`}
+                    />
+                    <div className = "absolute -top-12 right-16 text-sm">
+                        이 코드는 말이지....
+                    </div>
+                </div>
+               
+
 
                 {/* 모달 컨텐츠들 */}
                 <div className="text-white flex flex-col items-center justify-center w-full mt-[3vw] ">
