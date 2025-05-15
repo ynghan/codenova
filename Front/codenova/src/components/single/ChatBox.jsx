@@ -25,8 +25,16 @@ const ChatBox = () => {
         <div className="w-full h-[90%] border-black flex flex-col">
 
             {/* 체팅 박스 */}
-            <div className="w-full h-[90%] pointer-events-none">
-                {/* content를 AI가 보낸 답변이면 왼쪽 내가 친 대화내용이면 오른 쪽에 나오도록해야함함 */}
+            <div className="w-full h-[90%]">
+                {content.map((item, idx) => {
+                    <div
+                        key = {idx}
+                        className = {`flex ${item.sender === "나" ? "justify-end" : "justify-start"}`}
+                    >
+
+                    </div>
+                
+                })}
             </div>
 
             {/* 텍스트 인풋 박스 */}
