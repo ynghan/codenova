@@ -104,11 +104,11 @@ const FinishPage = ({ codeId, lang, cpm, elapsedTime, onShowCodeDescription}) =>
                 {/* 코드 설명 보러 가기 버튼 */}
                 <div className = {""} >
                      <img src={codeBtns[currentButtonIndex]} alt={`코드설명버튼${currentButtonIndex + 1}`} 
-                        className= {`w-[45%] cursor-pointer absolute -top-24 -right-12  ${btn_class}`}
+                        className= {`w-[35%] cursor-pointer absolute -top-20 -right-2 will-change-transform animate-poke ${btn_class}`}
                         onClick={onShowCodeDescription}
                     />
                     <img src={mouseImg} alt="마우스이미지" 
-                        className='w-[7%] absolute -top-16 -right-4 animate-poke'
+                        className='w-[7%] absolute -top-16 -right-4 '
                     />
                 </div>
                

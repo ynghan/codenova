@@ -60,3 +60,12 @@ export const verifiedRecord = async (data) => {
     }
 }
 
+export const codeDescription = async (codeId) => {
+    try {
+        const response = await authApi.get(`/api/single/code/${codeId}/description`)
+        console.log(response.data);
+        return response.data;
+    } catch (e) {
+        throw e;
+    }
+}

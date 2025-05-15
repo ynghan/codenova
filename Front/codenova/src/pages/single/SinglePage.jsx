@@ -110,10 +110,22 @@ const SinglePage = () => {
 
     // 포커스를 항상 유지
     useEffect(() => {
-        if (inputAreaRef.current && isFocused) {
+        if (inputAreaRef.current && isFocused && !isFinished) {
             inputAreaRef.current.focus();
         }
-    }, [isFocused]);
+    }, [isFocused, isFinished]);
+
+    useEffect(() => {
+        if (!isFinished) {
+            document.addEventListener("click", handleClickOutside);
+        } else {
+            document.removeEventListener("click", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [isFinished]);
 
     // 외부 클릭시 포커스를 유지
     const handleClickOutside = (e) => {
@@ -512,11 +524,41 @@ const SinglePage = () => {
                 </div>
                 
             )}
-            {showCodeDescription && (
+            {/* {showCodeDescription && (
                 <div className="absolute inset-0 flex items-center justify-center z-50">
-                    <CodeDescription onClose={() => setShowCodeDescription(false)} />
+                    <CodeDescription 
+                        onClose={() => setShowCodeDescription(false)} 
+                        lang={lang.toUpperCase()}
+                        codeId={codeId}
+                    />
                 </div>
-            )}
+            )} */}
+            {showCodeDescription && (
+    userType === 'member' ? (
+        <div className="absolute inset-0 flex items-center justify-center z-50">
+            <CodeDescription
+                onClose={() => setShowCodeDescription(false)}
+                lang={lang.toUpperCase()}
+                codeId={codeId}
+            />
+        </div>
+    ) : (
+        <>
+            {/* 경고 메시지 띄우기 */}
+            <div className="absolute inset-0 flex items-center justify-center z-50">
+                <div className="bg-black bg-opacity-80 text-white p-6 rounded-xl border border-gray-600 flex flex-col justify-center items-center">
+                    회원 전용 기능입니다.
+                    <button
+                        className="mt-4 px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
+                        onClick={() => setShowCodeDescription(false)}
+                    >
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </>
+    )
+)}
         </div>
     )
 };

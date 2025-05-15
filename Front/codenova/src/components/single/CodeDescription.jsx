@@ -4,8 +4,11 @@ import java from 'highlight.js/lib/languages/java';
 import python from 'highlight.js/lib/languages/python';
 import sql from 'highlight.js/lib/languages/sql';
 import 'highlight.js/styles/atom-one-dark.css';
+import { codeDescription } from '../../api/singleApi';
 import { useState, useEffect, useMemo } from 'react';
-
+import ReactMarkdown from 'react-markdown';
+import chatBtn from '../../assets/images/chat_bot.png'
+import AIChat from './AIChatModal';
 
 // 등록
 hljs.registerLanguage('java', java);
@@ -14,9 +17,34 @@ hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('sql', sql);
 
 
-const CodeDescription = ({onClose}) => {
+const CodeDescription = ({onClose, lang, codeId}) => {
 
-    const lang = "JS";
+    const [code, setCode] = useState("");
+    const [description, setDescription] = useState("");
+    const [isAIChat, setIsAIChat] = useState(false);
+
+    useEffect(() => {
+            if (codeId){
+                getCodeDescription(codeId)
+            }
+        },[codeId])
+
+    const getCodeDescription = async () => {
+        try {
+            const response = await codeDescription(codeId)
+            const {code, message} = response.status
+            if (code === 200) {
+                setCode(response.content.annotation);
+                setDescription(response.content.descript);
+            } else {
+                console.log("error", message)
+            }
+        } catch (e) {
+            throw e
+        }
+    }
+
+
 
     const langFormat = useMemo(() => {
         if (lang === "JAVA") return "language-java";
@@ -27,15 +55,13 @@ const CodeDescription = ({onClose}) => {
     }, [lang]);
 
     useEffect(() => {
-        hljs.highlightAll();
-    }, [langFormat]);
 
-    const sampleCode = `
-function greet(name) {
-    console.log("Hello, " + name);
-
-greet("World");
-`;
+        const codeBlocks = document.querySelectorAll('pre code.hljs');
+        codeBlocks.forEach((block) => {
+            block.removeAttribute('data-highlighted');  // ✅ highlight 초기화
+        });
+        hljs.highlightAll();  // ✅ 다시 적용
+    }, [langFormat, code]);
     
     return (
         <div className="w-[90%] h-[90%] z-[9999] rounded-xl flex items-center justify-center border-2"
@@ -60,9 +86,9 @@ greet("World");
                 >   
 
                     {/* 코드 */}
-                    <pre className='h-full w-full px-8'>
-                        <code className={` ${langFormat}`}>
-                            {sampleCode}
+                    <pre className='h-full w-full px-8 py-2'>
+                        <code className={`${langFormat} block w-full h-full overflow-y-auto overflow-x-auto custom-scrollbar`}>
+                            {code}
                         </code>
                     </pre>
 
@@ -75,17 +101,33 @@ greet("World");
                     }}
                 >
                     {/* 코드 설명 */}
-                    <div className='w-full h-full'>
-                        <h3 className="text-lg font-bold mb-2">📌 코드 설명</h3>
-                        <p><strong>greet 함수</strong>는 전달받은 name을 이용해 콘솔에 인사 메시지를 출력합니다.</p>
-                        <p>마지막 줄에서 greet("World") 를 호출하면 <code>Hello, World</code> 가 출력됩니다.</p>
+                    <div className='prose prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-auto custom-scrollbar'>
+                        <ReactMarkdown>{description}</ReactMarkdown>
                     </div>
-                
-
                 </div>
+
+                {/* AI chat 버튼 */}
+                <button
+                  className="fixed text-3xl bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 shadow-lg hover:brightness-110 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center text-white text-2xl font-bold animate-float ring-2 ring-indigo-300/50 hover:ring-4"
+                >
+                    <img 
+                        src={chatBtn} 
+                        alt="챗봇버튼" 
+                        className="w-[70%] h-auto"
+                        onClick={() => setIsAIChat(true)}
+                            
+                    />
+                </button>
             </div>
+
+            <AIChat 
+                isOpen = {isAIChat} 
+                onClose={() => setIsAIChat(false)}
+                codeId = {codeId}  
+            />
         </div>
     )
 }
 
 export default CodeDescription;
+
