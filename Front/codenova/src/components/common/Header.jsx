@@ -13,6 +13,7 @@ import { disconnectSocket } from "../../sockets/socketClient";
 import { useEffect, useState } from "react";
 import TutoModal from "./TutoModal";
 import SettingModal from "../modal/SettingModal";
+import { useSessionStore } from "../../store/useSessionStore";
 
 const Header = ({onShowTuto, onShowSetting}) => {
 
@@ -36,12 +37,15 @@ const Header = ({onShowTuto, onShowSetting}) => {
   
     // Zustand 상태 초기화
     logout();
-  
+
+    useSessionStore.getState().clearSession();
+
     // ✅ localStorage 항목 제거
     localStorage.removeItem("nickname");
     localStorage.removeItem("meteoRoomId");
     localStorage.removeItem("meteoRoomCode");
     localStorage.removeItem("auth-storage"); // ← 이것도 초기화하고 싶다면!
+    localStorage.removeItem("codenova_patch_note");
   
     // 소켓 연결 해제
     disconnectSocket();

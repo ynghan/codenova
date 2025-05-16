@@ -14,11 +14,12 @@ const MakeRoomModal = ({ onClose }) => {
     const [isPublic, setIsPublic] = useState(true);
     const [activeArrow, setActiveArrow] = useState(null);
 
-    const languages = ["PYTHON", "JAVA", "JS","SQL"]
+    const languages = ["PYTHON", "JAVA", "JS","SQL","RANDOM"]
     const navigate = useNavigate();
     const nickname = useAuthStore((state) => state.user?.nickname);
 
     const [alertMessage, setAlertMessage] = useState(null);
+    const [isCreating, setIsCreating] = useState(false);
 
     const handleLangChange = (dir) => {
         const index = languages.indexOf(language);
@@ -32,10 +33,14 @@ const MakeRoomModal = ({ onClose }) => {
       };
 
       const handleCreateRoom = () => {
+        if (isCreating) return;
+
         if (!title || !people || !language || !nickname) {
           setAlertMessage("모든 항목을 입력해주세요!");
           return;
         }
+
+        setIsCreating(true); // 중복 생성 방지지
       
         const payload = {
           title,
@@ -46,6 +51,8 @@ const MakeRoomModal = ({ onClose }) => {
         };
       
         createRoom(payload, (res) => {
+          // setIsCreating(false);
+
           if (!res || !res.roomId) {
             alert("방 생성 실패");
             return;
@@ -92,7 +99,7 @@ const MakeRoomModal = ({ onClose }) => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-[470px] px-4 py-2 text-black font-bold rounded-md"
                 placeholder="다함께 코드노바~"
-                maxLength={15}
+                maxLength={10}
               />
             </div>
 
@@ -189,6 +196,7 @@ const MakeRoomModal = ({ onClose }) => {
               <button 
                 className="w-[120px] h-[40px] hover:brightness-110 hover:scale-[0.98] active:scale-[0.95] mt-0.5"
                 onClick={handleCreateRoom}
+                disabled={isCreating} 
                 >
                 <img
                 src={makeRoomBtn}

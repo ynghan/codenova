@@ -5,6 +5,9 @@ import useAuthStore from "../../../store/authStore";
 import '../../../styles/single/SinglePage.css';
 import { Player } from "@lottiefiles/react-lottie-player";
 import codeLoading from "../../../assets/lottie/code_loading.json";
+import { userColorStore } from "../../../store/userSettingStore";
+
+
 
 const TypingBox = ({ 
   roomId, 
@@ -43,6 +46,14 @@ const TypingBox = ({
   const currentLineRef = useRef(null);
   const preContainerRef = useRef(null);
 
+  // 텍스트 색깔 지정
+  const initColors = userColorStore((state) => state.initColors);
+    
+  useEffect(() => {
+      inputRef.current?.focus();
+      initColors
+    }, []);
+
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -74,7 +85,7 @@ const TypingBox = ({
           roomId,
           nickname
         });
-        console.log("👿 typo_occurred_emit", roomId, nickname);
+        // console.log("👿 typo_occurred_emit", roomId, nickname);
       }
     }
 
@@ -120,7 +131,7 @@ const TypingBox = ({
       const lineElements = preContainerRef.current.querySelectorAll('.codeLine');
   
       if (lineElements[currentLine]) {
-        const lineHeight = lineElements[currentLine].getBoundingClientRect().height || 28;
+        const lineHeight = lineElements[currentLine].getBoundingClientRect().height || 32;
         const offset = lineHeight * currentLine;
   
         preContainerRef.current.scrollTop = offset;  // 줄 위치에 맞춰 스크롤
@@ -248,14 +259,29 @@ const TypingBox = ({
                             const isCursor = i === normalizedInput.length;
                             let className = '';
 
-                            if (inputChar == null) className = 'pending currentLine';
-                            else if (inputChar === char) className = 'typed currentLine';
-                            else className = 'wrong currentLine';
+                            if (inputChar == null) {
+                              className = 'pending currentLine';
+                            } else if (inputChar === char) {
+                              className = 'typed currentLine';
+                            } else {
+                              // 틀린 경우
+                              if (char === ' ') {
+                                className = 'wrong currentLine bg-red-400'; // 공백인데 틀림
+                              } else {
+                                className = 'wrong currentLine';
+                              }
+                            }
 
                             return (
                               <span key={i} className="cursor-container">
-                                {isCursor && <span className="cursor" />}
-                                <span className={className}>{char === ' ' ? '\u00A0' : char}</span>
+                                {isCursor && (
+                                  <span
+                                    className={`cursor ${char === ' ' && inputChar !== char ? 'bg-red-400' : ''}`}
+                                  />
+                                )}
+                                <span className={className}>
+                                  {char === ' ' ? '\u00A0' : char}
+                                </span>
                               </span>
                             );
                           })}
@@ -300,7 +326,7 @@ const TypingBox = ({
           disabled={disabled}
           onFocus={(e) => (e.target.placeholder = "")}
           onBlur={(e) => (e.target.placeholder = "Start Typing Code Here.")}
-          className={`input w-full px-4 py-2 rounded-md text-black focus:outline-none 
+          className={`single-input w-full px-4 py-2 rounded-md text-black focus:outline-none 
             ${isCorrect ? "border-4 border-green-400" : "border-4 border-red-400"}
             ${shake ? "animate-shake" : ""}`}
         />

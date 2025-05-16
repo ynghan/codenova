@@ -9,6 +9,7 @@ import useAuthStore from "../../store/authStore";
 import { connectSocket } from "../../sockets/socketClient";
 import signupButton from "../../assets/images/signup_button.png";
 import goLanding from "../../assets/images/golanding.png";
+import { useSessionStore } from "../../store/useSessionStore";
 const LoginPage = () => {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
@@ -35,17 +36,25 @@ const LoginPage = () => {
       const accessToken = rawToken.split(' ')[1]
       const nickname = response.data.content.nickname
       // console.log(nickname)
-      document.cookie = `accessToken=${accessToken}; path=/; max-age=86400;`;
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=604800;`;
 
       login({
         nickname,
         token: accessToken,
-      });
+      });    
+      
+      useSessionStore.getState().setSession(); //sessionKey 달라고 요청
+      
       connectSocket();
       navigate("/main")
     } catch (err) {
       // console.error(err)
       alert("로그인 실패!")
+      // localStorage.removeItem("nickname");
+      // localStorage.removeItem("meteoRoomId");
+      // localStorage.removeItem("meteoRoomCode");
+      // localStorage.removeItem("auth-storage"); // ← 이것도 초기화하고 싶다면!
+      // localStorage.removeItem("codenova_patch_note");
     }
   }
   

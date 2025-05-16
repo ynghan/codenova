@@ -12,10 +12,11 @@ import RankingRoutes from "./routes/RankingRoutes";
 import { connectSocket, disconnectSocket } from "./sockets/socketClient";
 import { useEffect} from "react";
 import PrivateRoute from "./routes/PrivateRoute";
-import ErrorBoundary from "./components/ErrorBoundary";
 import { preventDevTool } from "./components/common/preDevTool";
+import { useSessionStore } from "./store/useSessionStore";
 
 function App() {
+  const userType = useAuthStore((state) => state.user?.userType);
   const isAuthenticated = useAuthStore((state) => !!state.token);
 
   useEffect(() => {
@@ -23,16 +24,22 @@ function App() {
       // 로그인 직후 혹은 복구 직후
       // console.log("🟢 Authenticated → connect socket");
       connectSocket();
+      if (userType === "member") {
+        useSessionStore.getState().initSessionFromStorage();
+      }
     } else {
       // 로그아웃 직후
       // console.log("🔴 Not authenticated → disconnect socket");
       disconnectSocket();
+      useSessionStore.getState().clearSession();
     }
   }, [isAuthenticated]);
 
-  // useEffect(() => {
-  //   preventDevTool();
-  // }, [])
+  useEffect(() => {
+    preventDevTool();
+  }, [])
+
+
 
   return (
     <BrowserRouter>
