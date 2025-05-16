@@ -14,7 +14,7 @@ const MakeRoomModal = ({ onClose }) => {
     const [isPublic, setIsPublic] = useState(true);
     const [activeArrow, setActiveArrow] = useState(null);
 
-    const languages = ["PYTHON", "JAVA", "JS","SQL"]
+    const languages = ["PYTHON", "JAVA", "JS","SQL","RANDOM"]
     const navigate = useNavigate();
     const nickname = useAuthStore((state) => state.user?.nickname);
 
@@ -51,7 +51,7 @@ const MakeRoomModal = ({ onClose }) => {
         };
       
         createRoom(payload, (res) => {
-          setIsCreating(false);
+          // setIsCreating(false);
 
           if (!res || !res.roomId) {
             alert("방 생성 실패");
@@ -99,7 +99,7 @@ const MakeRoomModal = ({ onClose }) => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-[470px] px-4 py-2 text-black font-bold rounded-md"
                 placeholder="다함께 코드노바~"
-                maxLength={15}
+                maxLength={10}
               />
             </div>
 
