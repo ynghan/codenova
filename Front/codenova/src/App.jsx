@@ -36,9 +36,9 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  // useEffect(() => {
-  //   preventDevTool();
-  // }, [])
+  useEffect(() => {
+    preventDevTool();
+  }, [])
 
 
 
