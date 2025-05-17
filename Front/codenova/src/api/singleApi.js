@@ -1,5 +1,6 @@
 import api from "./axiosConfig"
 import authApi from "./authAxiosConfig";
+import chatAxiosApi from "./chatAxiosConfig";
 
 export const singleLangCode = async (lang) => {
     try {
@@ -75,7 +76,7 @@ export const codeDescription = async (codeId) => {
 
 export const chatBotRequest = async (message) => {
     try {
-        const response = await authApi.post('/api/single/chat', {
+        const response = await chatAxiosApi.post('/api/single/chat', {
             message : message
         })
         console.log(response.data);

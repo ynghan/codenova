@@ -5,7 +5,7 @@ import Keyboard from '../../components/keyboard/Keyboard'
 
 
 import { getAccessToken } from "../../utils/tokenUtils";
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState, useRef} from 'react'
 
 import hljs from 'highlight.js/lib/core';
