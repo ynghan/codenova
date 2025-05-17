@@ -37,7 +37,7 @@ const CodeDescription = ({onClose, lang, codeId}) => {
                 setCode(response.content.annotation);
                 setDescription(response.content.descript);
             } else {
-                console.log("error", message)
+                // console.log("error", message)
             }
         } catch (e) {
             throw e

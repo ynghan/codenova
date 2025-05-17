@@ -54,7 +54,7 @@ const ChatBox = ({codeId}) => {
         
         setCurrentInput(""); 
         
-        console.log('Submit:', currentInput );
+        // console.log('Submit:', currentInput );
         
         const newMessage = {
             sender : "me",
