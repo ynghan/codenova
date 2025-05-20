@@ -150,14 +150,14 @@ const ChatBox = ({codeId}) => {
                     }}
                 />
 
-                <button
+                {/* <button
                 onClick = {() => {
                     
                 }}
                 className = "absolute z-[11] right-20 bottom-0.5 -translate-y-1/2 bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 active:scale-95"
                 >   
                     
-                </button>
+                </button> */}
 
                 <button
                 onClick = {() => {
