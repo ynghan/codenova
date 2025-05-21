@@ -136,6 +136,7 @@ const FinishPage = ({ codeId, lang, cpm, elapsedTime, onShowCodeDescription}) =>
                         </div>
                     </div>
 
+                    
                     {/* 버튼 컨테이너  */}
                     <div className={`mt-10 flex w-[40%] max-w-[400px] justify-center gap-12`}>
                 
